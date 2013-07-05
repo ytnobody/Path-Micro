@@ -3,7 +3,7 @@ use 5.008005;
 use strict;
 use warnings;
 use File::Spec;
-use File::Basename;
+use File::Basename ();
 use Carp;
 use Guard;
 
@@ -25,10 +25,18 @@ sub path {
     return (@{$self->{path}}, @relpath);
 }
 
+sub cwd {
+    File::Spec->curdir;
+}
+
+sub rel {
+    my ($self, @relpath) = @_;
+    return __PACKAGE__->new($self->path(@relpath));
+}
+
 sub abs {
     my $self = shift;
-    $self->{path} = [_splat(File::Spec->rel2abs(@$self))];
-    return $self;
+    return __PACKAGE__->new(_splat(File::Spec->rel2abs($self->path)));
 }
 
 sub as_string {
@@ -58,12 +66,23 @@ sub slurp {
     do { local $/; (<$fh>) };
 }
 
-sub spew {
-    my ($self, $data) = @_;
-    open my $fh, '>', $self->as_string or croak $!;
+sub _spew {
+    my ($self, $mode, $data) = @_;
+    open my $fh, $mode, $self->as_string or croak $!;
     my $guard = guard { close $fh if defined $fh };
     print $fh $data;
 }
+
+sub spew {
+    my ($self, $data) = @_;
+    $self->_spew('>', $data);
+}
+
+sub append {
+    my ($self, $data) = @_;
+    $self->_spew('>>', $data);
+}
+
 
 1;
 __END__

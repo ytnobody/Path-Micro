@@ -4,7 +4,7 @@
       "ytnobody <ytnobody@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.5.5, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.5.3, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -52,5 +52,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ytnobody/Path-Micro/issues"
+      },
+      "homepage" : "https://github.com/ytnobody/Path-Micro",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ytnobody/Path-Micro.git",
+         "web" : "https://github.com/ytnobody/Path-Micro"
+      }
+   },
    "version" : "0.01"
 }
