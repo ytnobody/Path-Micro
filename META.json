@@ -42,6 +42,9 @@
       },
       "runtime" : {
          "requires" : {
+            "File::Basename" : "0",
+            "File::Spec" : "0",
+            "Guard" : "0",
             "perl" : "5.008005"
          }
       },
