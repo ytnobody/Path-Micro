@@ -9,6 +9,15 @@ use Guard;
 
 our $VERSION = "0.01";
 our $SPLITTER = $^O eq 'MSWin32' ? qr/\\/ : qr/\//;
+our $AUTOLOAD;
+
+sub AUTOLOAD {
+    my $class = __PACKAGE__;
+    local ($AUTOLOAD) = $AUTOLOAD =~ /^$class\:\:(.*)$/;
+    return if $AUTOLOAD =~ /^(import|[A-Z]+)$/;
+    croak "undefined method $AUTOLOAD" unless File::Spec->can($AUTOLOAD);
+    File::Spec->$AUTOLOAD(@_);
+}
 
 sub new {
     my ($class, @path) = @_;
@@ -25,10 +34,6 @@ sub path {
     return (@{$self->{path}}, @relpath);
 }
 
-sub cwd {
-    File::Spec->curdir;
-}
-
 sub rel {
     my ($self, @relpath) = @_;
     return __PACKAGE__->new($self->path(@relpath));
@@ -36,22 +41,22 @@ sub rel {
 
 sub abs {
     my $self = shift;
-    return __PACKAGE__->new(_splat(File::Spec->rel2abs($self->path)));
+    return __PACKAGE__->new(_splat(File::Spec->rel2abs($self->as_string)));
 }
 
 sub as_string {
     my $self = shift;
-    if ( -d (my $path = File::Spec->catdir($self->path)) ) {
+    if ( -f (my $path = File::Spec->catfile($self->path)) ) {
         return $path;
     }
     else {
-        return File::Spec->catfile($self->path);
+        return File::Spec->catdir($self->path);
     }
 }
 
 sub basename {
     my $self = shift;
-    File::Basename::basename($self->path);
+    File::Basename::basename($self->as_string);
 }
 
 sub dir {
