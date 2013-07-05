@@ -103,9 +103,6 @@ Path::Micro - Micro sized path manipulator (File::Spec plus alpha)
     use Path::Micro;
     my $path = Path::Micro->new(qw/path to file.txt/);
     
-    # or 
-    # my $path = path_to(qw/path to file.txt/);
-    
     my $path_str = $path->as_string;                   # path/to/file.txt
     my $dirname  = $path->dirname;                     # path/to
     my $basename = $path->basename;                    # file.txt
